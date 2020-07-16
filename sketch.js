@@ -1,64 +1,71 @@
 const Engine = Matter.Engine;
-const World= Matter.World;
+const World = Matter.World;
+const Body = Matter.Body;
 const Bodies = Matter.Bodies;
+const Constraint = Matter.Constraint;
 
-var engine, world;
-var box1, pig1;
-var backgroundImg,platform;
+let engine, world, backgroundIMG, drag, score;
+let ground1, ground2, slingshot1;
+let box1, box2, box3, box4, box5;
+let pig1, pig2, bird1;
+let log1, log2, log3, log4, log5;
 
 function preload() {
-    backgroundImg = loadImage("sprites/bg.png");
+    backgroundIMG = loadImage("Images-Animations/background.png");
 }
 
 function setup(){
-    var canvas = createCanvas(1200,400);
+    score = 0;
+    createCanvas(1200,400);
     engine = Engine.create();
     world = engine.world;
+    drag = false;
 
+    bird1 = new Bird(200, 50);
 
-    ground = new Ground(600,height,1200,20);
-    platform = new Ground(150, 305, 300, 150);
+    ground1 = new Ground(600, height, 1200 ,20)
+    ground2 = new Ground(200, height*3/4, 400, height/2);
 
-    box1 = new Box(700,320,70,70);
-    box2 = new Box(920,320,70,70);
-    pig1 = new Pig(810, 350);
-    log1 = new Log(810,260,300, PI/2);
+    box1 = new Box(700, 355, 70, 70);
+    box2 = new Box(920, 355, 70, 70);
+    pig2 = new Pig(810, 365);
+    log1 = new Log(810 ,320, 300, 0);
 
-    box3 = new Box(700,240,70,70);
-    box4 = new Box(920,240,70,70);
-    pig3 = new Pig(810, 220);
+    box3 = new Box(700,265,70,70);
+    box4 = new Box(920,265,70,70);
+    pig1 = new Pig(810, 275);
 
-    log3 =  new Log(810,180,300, PI/2);
+    log2 =  new Log(810, 230, 300, 0);
 
-    box5 = new Box(810,160,70,70);
-    log4 = new Log(760,120,150, PI/7);
-    log5 = new Log(870,120,150, -PI/7);
+    box5 = new Box(810,177,70,70);
+    log3 = new Log(748,154,150, PI/4*3);
+    log4 = new Log(848,154,150, PI/4);
 
-    bird = new Bird(100,100);
-
+    slingshot1 = new Slingshot(bird1, {'x' : 200, 'y' : 50});
 }
 
-function draw(){
-    background(backgroundImg);
+function draw() {
+    background(backgroundIMG);
+    textSize(24);
+    text("Score = " + score, 1000, 50);
     Engine.update(engine);
-    console.log(box2.body.position.x);
-    console.log(box2.body.position.y);
-    console.log(box2.body.angle);
-    box1.display();
-    box2.display();
-    ground.display();
-    pig1.display();
-    log1.display();
+    slingshot1.display();
+    displayEverything();
+    if (drag && bird1.canDrag) {
+        Body.setPosition(bird1.body, {x : mouseX, y : mouseY});
+    }
+}
 
-    box3.display();
-    box4.display();
-    pig3.display();
-    log3.display();
+function mouseDragged() {
+    if (mouseX - bird1.body.position.x < 25 && mouseX - bird1.body.position.x > -25 && mouseY - bird1.body.position.y < 25 && mouseY - bird1.body.position.y > -25) {
+        drag = true;
+    }
+}
 
-    box5.display();
-    log4.display();
-    log5.display();
-
-    bird.display();
-    platform.display();
+function mouseReleased() {
+    if (drag) {
+        slingshot1.fly();
+        drag = false
+        bird1.canDrag = false;
+    }
 }
