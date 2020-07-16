@@ -7,11 +7,12 @@ const Constraint = Matter.Constraint;
 let engine, world, backgroundIMG, drag, score;
 let ground1, ground2, slingshot1;
 let box1, box2, box3, box4, box5;
-let pig1, pig2, bird1;
+let pig1, pig2, bird1, smokeIMG;
 let log1, log2, log3, log4, log5;
 
 function preload() {
     backgroundIMG = loadImage("Images-Animations/background.png");
+    smokeIMG = loadImage("Images-Animations/smoke.png");
 }
 
 function setup(){
@@ -67,5 +68,23 @@ function mouseReleased() {
         slingshot1.fly();
         drag = false
         bird1.canDrag = false;
+    }
+}
+
+function reset() {
+    slingshot1.flown = false;
+    slingshot1.chain.bodyA = bird1.body;
+    Body.setPosition(bird1.body, {'x' : 200, 'y' : 50});
+    Body.setVelocity(bird1.body, {'x' : 0, 'y' : 0});
+    Body.setAngularVelocity(bird1.body, 0);
+    Body.setAngle(bird1.body, 0);
+    bird1.body.speed = 0;
+    bird1.body.angularSpeed = 0;
+    bird1.trajectory = [];
+    drag = false;
+    bird1.canDrag = true;
+    score = 0;
+    for (loop1 = 0; loop1 < everything.length; loop1 += 1) {
+        World.add(world, everything[loop1].body)
     }
 }

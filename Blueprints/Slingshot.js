@@ -18,10 +18,10 @@ class Slingshot {
         if (!this.flown) {
             stroke(48, 22, 8);
             strokeWeight(10);
-            if (this.chain.bodyA.position.x < this.chain.pointB.x) {
+            if (this.chain.bodyA.position.x < this.chain.pointB.x && drag) {
                 strokeWeight(10);
                 image(this.sling3, this.chain.bodyA.position.x - 22.5, this.chain.bodyA.position.y, 20, 40);
-            } else if (this.chain.bodyA.position.x > this.chain.pointB.x) {
+            } else if (this.chain.bodyA.position.x > this.chain.pointB.x && drag) {
                 strokeWeight(5);
                 image(this.sling3, this.chain.bodyA.position.x + 22.5, this.chain.bodyA.position.y, 20, 40);
             }

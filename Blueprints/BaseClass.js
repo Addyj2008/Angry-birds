@@ -1,4 +1,4 @@
-var everything = [], loop1;
+var everything = [], loop1, loop2;
 
 class BaseClass{
   constructor(x, y, width, height) {
@@ -14,13 +14,21 @@ class BaseClass{
     everything.push(this);
   }
   display(){
+    if (!this.notBird && slingshot1.flown) {
+      if (bird1.body.speed >= 10) {
+        this.trajectory.push({'x' : this.body.position.x, 'y' : this.body.position.y});
+      }
+        for (loop2 = 0; loop2 < this.trajectory.length; loop2 += 1) {
+        image(smokeIMG, this.trajectory[loop2].x, this.trajectory[loop2].y)
+      }
+    }
     if (this.body.speed >= 5 && this.notBird) {
       World.remove(world, this.body);
       this.destroyed = true;
       push();
       this.visibility -= 5;
-      if (!this.notPig && this.visibilty > 0)  {
-        score += 1;
+      if (!this.notPig && this.visibility > 0)  {
+        score += 2;
       }
       rotate(this.body.angle);
       imageMode(CENTER);
