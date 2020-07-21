@@ -11,7 +11,7 @@ let pig1, pig2, bird1, smokeIMG;
 let log1, log2, log3, log4, log5;
 
 function preload() {
-    backgroundIMG = loadImage("Images-Animations/background.png");
+    getBackground();
     smokeIMG = loadImage("Images-Animations/smoke.png");
 }
 
@@ -46,7 +46,9 @@ function setup(){
 }
 
 function draw() {
-    background(backgroundIMG);
+    if (backgroundIMG != undefined) {
+        background(backgroundIMG);
+    }
     textSize(24);
     text("Score = " + score, 1000, 50);
     Engine.update(engine);
@@ -86,5 +88,15 @@ function reset() {
     score = 0;
     for (loop1 = 0; loop1 < everything.length; loop1 += 1) {
         World.add(world, everything[loop1].body)
+    }
+}
+
+async function getBackground() {
+    let Time = await fetch('http://worldtimeapi.org/api/timezone/Asia/Kolkata');
+    let Response = await Time.json();
+    if (Response.datetime.slice(11, 13) >= 7 && Response.datetime.slice(11, 13) <= 19) {
+        backgroundIMG = loadImage("Images-Animations/background.png");
+    } else {
+        backgroundIMG = loadImage("Images-Animations/Night-Background.png");
     }
 }
